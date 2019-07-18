@@ -1,7 +1,14 @@
 import React from "react";
+import Timer from "./components/Timer";
+import MainButton from "./components/MainButton";
 
 function App() {
-	return <div>Output app here</div>;
+	return (
+		<div>
+			<Timer />
+			<MainButton />
+		</div>
+	);
 }
 
 export default App;
