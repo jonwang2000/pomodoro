@@ -3,13 +3,16 @@ import Timer from "./components/Timer";
 import MainButton from "./components/MainButton";
 
 function App() {
-	const [timer, setTimer] = useState(0);
+	const [timer, setTimer] = useState(15 * 60 - 3);
 	const [timerOn, setTimerOn] = useState(false);
     const [timeLimit, setTimeLimit] = useState(15 * 60)
 
 	useEffect(() => {
 		let interval = null;
-		if (timerOn) {
+        if (timer === timeLimit) {
+            alert('Time limit!')
+            return () => clearInterval(interval)
+        } else if (timerOn) {
 			interval = setInterval(() => {
 				setTimer(timer + 1);
 			}, 1000);
