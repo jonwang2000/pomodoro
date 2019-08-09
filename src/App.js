@@ -3,16 +3,16 @@ import Timer from "./components/Timer";
 import MainButton from "./components/MainButton";
 
 function App() {
-	const [timer, setTimer] = useState(15 * 60 - 3);
+	const [timer, setTimer] = useState(0);
 	const [timerOn, setTimerOn] = useState(false);
-    const [timeLimit, setTimeLimit] = useState(15 * 60)
+	const [timeLimit, setTimeLimit] = useState(15 * 60);
 
 	useEffect(() => {
 		let interval = null;
-        if (timer === timeLimit) {
-            alert('Time limit!')
-            return () => clearInterval(interval)
-        } else if (timerOn) {
+		if (timer === timeLimit) {
+			alert("Time limit!");
+			return () => clearInterval(interval);
+		} else if (timerOn) {
 			interval = setInterval(() => {
 				setTimer(timer + 1);
 			}, 1000);
@@ -20,9 +20,9 @@ function App() {
 			clearInterval(interval);
 		}
 		return () => clearInterval(interval);
-	}, [timerOn, timer]);
+	}, [timerOn, timer, timeLimit]);
 
-    // Helper that converts total number of seconds to a string in a timer format
+	// Helper that converts total number of seconds to a string in a timer format
 	const secondsToTimer = secNo => {
 		let minutes = Math.floor(secNo / 60);
 		let seconds = secNo % 60;
@@ -35,6 +35,17 @@ function App() {
 	return (
 		<div>
 			<p>{secondsToTimer(timer)}</p>
+
+			<div>
+				<input
+					value={timeLimit / 60}
+					type="number"
+					onChange={e => {
+						setTimeLimit(e.target.value * 60);
+					}}
+				/>{" "}
+				minutes
+			</div>
 
 			<Timer timer={timer} setTimer={setTimer} />
 			<MainButton timerOn={timerOn} setTimerOn={setTimerOn} />
