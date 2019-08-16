@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
-import Timer from "./components/Timer";
-import MainButton from "./components/MainButton";
+// import Timer from "./components/Timer";
+// import MainButton from "./components/MainButton";
 
 function App() {
 	const [timer, setTimer] = useState(0);
 	const [timerOn, setTimerOn] = useState(false);
 	const [timeLimit, setTimeLimit] = useState(15 * 60);
+	const [timerLabel, setTimerLabel] = useState("Idle");
 
+    // Timer effect
 	useEffect(() => {
 		let interval = null;
-		if (timer === timeLimit) {
-			alert("Time limit!");
-			return () => clearInterval(interval);
-		} else if (timerOn) {
-			interval = setInterval(() => {
+
+        if (timerOn) {
+            interval = setInterval(() => {
 				setTimer(timer + 1);
 			}, 1000);
+        } else {
+            clearInterval(interval);
+        }
+
+		if (timeLimit !== 0 && timer === timeLimit) {
+			console.log("TIME LIMIT");
+		} else if (timerOn && timer <= timeLimit) {
+			setTimerLabel("Working");
+		} else if (timerOn && timer >= timeLimit) {
+			setTimerLabel("Take a break!");
 		} else if (!timerOn && timer !== 0) {
-			clearInterval(interval);
+			setTimerLabel("Idle");
 		}
 		return () => clearInterval(interval);
 	}, [timerOn, timer, timeLimit]);
@@ -35,6 +45,7 @@ function App() {
 	return (
 		<div>
 			<p>{secondsToTimer(timer)}</p>
+			<p>{timerLabel}</p>
 
 			<div>
 				<input
@@ -43,14 +54,16 @@ function App() {
 					onChange={e => {
 						setTimeLimit(e.target.value * 60);
 					}}
-				/>{" "}
+				/>
 				minutes
 			</div>
 
-			<Timer timer={timer} setTimer={setTimer} />
-			<MainButton timerOn={timerOn} setTimerOn={setTimerOn} />
-
-			<button onClick={() => setTimerOn(!timerOn)}>Button!</button>
+			<button
+				disabled={timeLimit === 0}
+				onClick={() => setTimerOn(!timerOn)}
+			>
+				Button!
+			</button>
 		</div>
 	);
 }
